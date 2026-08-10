@@ -1,0 +1,18 @@
+{
+	"node": "n8n-nodes-ictcontact.ictContact",
+	"nodeVersion": "1.0",
+	"codexVersion": "1.0",
+	"categories": ["Communication", "Marketing"],
+	"resources": {
+		"credentialDocumentation": [
+			{
+				"url": "https://www.ictcontact.com/using-rest-based-api-to-integrate-ictcontact-with-third-party-application-and-autodialer-automation/"
+			}
+		],
+		"primaryDocumentation": [
+			{
+				"url": "https://github.com/ictinnovations/n8n-nodes-ictcontact"
+			}
+		]
+	}
+}
