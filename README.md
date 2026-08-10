@@ -28,7 +28,7 @@ Restart n8n afterwards.
 | Field | Value |
 |-------|-------|
 | Base URL | Your server without the `/rest` suffix |
-| Authentication | API Key (default) or username and password |
+| Authentication | Username and password (default) or API Key |
 | API Key | Found in ICTContact under **My Account → API Key** |
 | Ignore SSL Issues | Turn this on if your box still runs a self-signed certificate |
 
@@ -37,7 +37,7 @@ Hit **Test** after filling it in. The test calls `User_Role_List`, which takes n
 ## Operations
 
 **Campaign**
-- Start, Stop, Get Status, Get Summary, Get Result, Filter, Create Contact, Import Contacts (upload a CSV as binary data)
+- Start, Stop, Get Status, Get Summary, Get Result, List, Create Contact, Import Contacts (upload a CSV as binary data)
 
 **Contact**
 - Create, Delete

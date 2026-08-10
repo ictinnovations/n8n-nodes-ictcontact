@@ -81,7 +81,7 @@ export class IctContact implements INodeType {
 						description: 'Upload a CSV of contacts into a campaign',
 						action: 'Import contacts into a campaign',
 					},
-					{ name: 'Search', value: 'filter', action: 'Search campaigns' },
+					{ name: 'List', value: 'list', action: 'List many campaigns' },
 					{ name: 'Start', value: 'start', action: 'Start a campaign' },
 					{ name: 'Stop', value: 'stop', action: 'Stop a campaign' },
 				],
@@ -147,14 +147,6 @@ export class IctContact implements INodeType {
 				default: 'data',
 				displayOptions: { show: { resource: ['campaign'], operation: ['import'] } },
 				description: 'Name of the binary field holding the contacts CSV',
-			},
-			{
-				displayName: 'Search Query',
-				name: 'search',
-				type: 'json',
-				default: '{}',
-				displayOptions: { show: { resource: ['campaign'], operation: ['filter'] } },
-				description: 'Search terms passed to Campaign_Filter as a JSON object',
 			},
 
 			// Contact
@@ -294,10 +286,8 @@ export class IctContact implements INodeType {
 							usr_id: this.getNodeParameter('usrId', i, '') as string,
 							status: this.getNodeParameter('status', i, '') as string,
 						});
-					} else if (operation === 'filter') {
-						responseData = await ictContactApiRequest.call(this, 'Campaign_Filter', {
-							search: parseJson(this.getNodeParameter('search', i, '{}'), 'Search Query', i),
-						});
+					} else if (operation === 'list') {
+						responseData = await ictContactApiRequest.call(this, 'Campaign_List');
 					} else if (operation === 'addContact') {
 						responseData = await ictContactApiRequest.call(this, 'Campaign_Contact_Create', {
 							campaign_id: campaignId,
