@@ -134,7 +134,7 @@ export class IctContact implements INodeType {
 				displayOptions: { show: { resource: ['campaign'], operation: ['addContact'] } },
 				options: [
 					{ displayName: 'Address', name: 'address', type: 'string', default: '' },
-					{ displayName: 'Email', name: 'email', type: 'string', default: '' },
+					{ displayName: 'Email', name: 'email', type: 'string', placeholder: 'name@email.com', default: '' },
 					{ displayName: 'First Name', name: 'first_name', type: 'string', default: '' },
 					{ displayName: 'Last Name', name: 'last_name', type: 'string', default: '' },
 				],
@@ -195,7 +195,7 @@ export class IctContact implements INodeType {
 				displayOptions: { show: { resource: ['contact'], operation: ['create'] } },
 				options: [
 					{ displayName: 'Address', name: 'address', type: 'string', default: '' },
-					{ displayName: 'Email', name: 'email', type: 'string', default: '' },
+					{ displayName: 'Email', name: 'email', type: 'string', placeholder: 'name@email.com', default: '' },
 					{ displayName: 'First Name', name: 'first_name', type: 'string', default: '' },
 					{ displayName: 'Last Name', name: 'last_name', type: 'string', default: '' },
 				],

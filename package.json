@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-ictcontact",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "n8n community node for ICTContact and ICTDialer.com. Run campaigns, manage contacts and users from a workflow.",
   "keywords": [
     "n8n-community-node-package",
@@ -57,6 +57,7 @@
     "@n8n/eslint-plugin-community-nodes": "^0.28.0",
     "@types/node": "^20.19.0",
     "eslint": "9.29.0",
+    "eslint-plugin-n8n-nodes-base": "^2.0.0",
     "gulp": "^5.0.0",
     "jsonc-eslint-parser": "^2.4.2",
     "n8n-workflow": "*",
