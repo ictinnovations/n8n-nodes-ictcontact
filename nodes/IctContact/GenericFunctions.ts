@@ -70,6 +70,15 @@ export async function ictContactApiRequest(
 		}
 	}
 
+	// A call that blew up server side answers HTTP 200 with a bare error object
+	// instead of the envelope, so without this it would arrive as a valid row.
+	if (payload && typeof payload === 'object' && !Array.isArray(payload) && 'ErrorMessage' in payload) {
+		throw new NodeOperationError(
+			this.getNode(),
+			`ICTContact failed ${method}: ${String((payload as IDataObject).ErrorMessage)}`,
+		);
+	}
+
 	// Every call comes back as a [ok, payload] envelope with HTTP 200 attached,
 	// even when it failed, so that boolean is the only success signal there is.
 	if (Array.isArray(payload) && payload.length === 2 && typeof payload[0] === 'boolean') {
