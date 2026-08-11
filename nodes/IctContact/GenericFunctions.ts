@@ -1,4 +1,5 @@
 import type { IDataObject, IExecuteFunctions, IHttpRequestOptions } from 'n8n-workflow';
+import { NodeOperationError } from 'n8n-workflow';
 
 export interface Attachment {
 	name: string;
@@ -60,12 +61,26 @@ export async function ictContactApiRequest(
 	);
 
 	// Some methods answer with a JSON string rather than a JSON body.
-	if (typeof response === 'string') {
+	let payload = response;
+	if (typeof payload === 'string') {
 		try {
-			return JSON.parse(response);
+			payload = JSON.parse(payload);
 		} catch {
-			return { result: response };
+			return { result: payload };
 		}
 	}
-	return response;
+
+	// Every call comes back as a [ok, payload] envelope with HTTP 200 attached,
+	// even when it failed, so that boolean is the only success signal there is.
+	if (Array.isArray(payload) && payload.length === 2 && typeof payload[0] === 'boolean') {
+		if (!payload[0]) {
+			throw new NodeOperationError(
+				this.getNode(),
+				`ICTContact refused ${method}: ${String(payload[1] ?? 'no reason given')}`,
+			);
+		}
+		return payload[1];
+	}
+
+	return payload;
 }
