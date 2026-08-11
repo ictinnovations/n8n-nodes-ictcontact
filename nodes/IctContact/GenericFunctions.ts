@@ -52,9 +52,14 @@ export async function ictContactApiRequest(
 		headers: {
 			Accept: 'application/json',
 		},
+		// A failed call answers 500 with {ErrorCode, ErrorMessage}. Letting the
+		// helper throw on status would replace that with a generic message, so
+		// take the response as is and do the status check below.
+		returnFullResponse: true,
+		ignoreHttpStatusErrors: true,
 	};
 
-	const response = await this.helpers.httpRequestWithAuthentication.call(
+	const { statusCode, body: response } = await this.helpers.httpRequestWithAuthentication.call(
 		this,
 		'ictContactApi',
 		options,
@@ -66,16 +71,29 @@ export async function ictContactApiRequest(
 		try {
 			payload = JSON.parse(payload);
 		} catch {
+			if (statusCode >= 400) {
+				throw new NodeOperationError(
+					this.getNode(),
+					`ICTContact failed ${method}: HTTP ${statusCode} ${payload.slice(0, 200)}`,
+				);
+			}
 			return { result: payload };
 		}
 	}
 
-	// A call that blew up server side answers HTTP 200 with a bare error object
-	// instead of the envelope, so without this it would arrive as a valid row.
-	if (payload && typeof payload === 'object' && !Array.isArray(payload) && 'ErrorMessage' in payload) {
+	// A call that blew up server side carries the reason in the body rather than
+	// the status text, so pull it out instead of reporting a bare 500.
+	const errorMessage =
+		payload && typeof payload === 'object' && !Array.isArray(payload)
+			? (payload as IDataObject).ErrorMessage
+			: undefined;
+	if (errorMessage !== undefined) {
+		throw new NodeOperationError(this.getNode(), `ICTContact failed ${method}: ${String(errorMessage)}`);
+	}
+	if (statusCode >= 400) {
 		throw new NodeOperationError(
 			this.getNode(),
-			`ICTContact failed ${method}: ${String((payload as IDataObject).ErrorMessage)}`,
+			`ICTContact failed ${method}: HTTP ${statusCode} ${JSON.stringify(payload).slice(0, 200)}`,
 		);
 	}
 
